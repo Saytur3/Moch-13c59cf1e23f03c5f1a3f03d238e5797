@@ -1,0 +1,54 @@
+<html>
+<head>
+  <title>Aplikasi - Register</title>
+  <script src="jquery-3.5.1.min.js"></script>
+  <script src="main.js"></script>
+</head>
+<body>
+<div id="waktu"></div>
+<div>
+  <h2>Register</h2>
+  Username :
+  <input type="text" name="username" id="username"> <br/>
+  Password :
+  <input type="password" name="password" id="password"> <br/>
+  Ulangi Password :
+  <input type="password" name="password2" id="password2"> <br/>
+  <button onclick="postregister()">Register</button> <br/> <br/>
+  <a href="login.html">Login</a>
+</div>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", () => {
+  getstatuslogin();
+  startTime();
+});
+function getstatuslogin() {
+  $.get( "../back-end/cekstatuslogin.php", function( data ) {
+    if (data!='notlogin') window.location.href = "index.html";
+  });
+}
+function postregister() {
+  var username = $('#username').val();
+  var password = $('#password').val();
+  var password2 = $('#password2').val();
+  if (username=='' || password=='') {
+    alert ('harap isi dengan lengkap');
+  } else if (password!=password2) {
+    alert ('Password dan ulangi password harus sama');
+  } else {
+    $.post("../back-end/register.php",
+    {
+      username: username,
+      password: password
+    },
+    function(data){
+      if (data=='berhasil') window.location.href = "login.html";
+      else if (data=='cobalagi') alert ('Terjadi Kesalahan COba lagi');
+      else if (data=='userdigunakan') alert ('Username Sudah digunakan');
+      else console.log(data);
+    });
+  }
+}
+</script>
+</body>
+</html>
